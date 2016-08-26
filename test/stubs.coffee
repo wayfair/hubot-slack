@@ -97,7 +97,7 @@ beforeEach ->
       @stubs._msg = message
       @stubs._room = room
     dataStore:
-      getChannelByName: (name) =>
+      getChannelOrGroupByName: (name) =>
         switch name
           when 'known_room' then {id: 'C00000004'}
           else undefined
