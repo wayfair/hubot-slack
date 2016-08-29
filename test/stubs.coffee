@@ -107,7 +107,7 @@ beforeEach ->
       @stubs._opts = message
       @stubs._room = room
   @stubs.channelsMock =
-    setTopic: (id, topic) =>
+    setTopic: (env, topic) =>
       @stubs._topic = topic
   # Hubot.Robot instance
   @stubs.robot = do ->

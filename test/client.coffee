@@ -58,7 +58,7 @@ describe 'disconnect()', ->
 
 describe 'setTopic()', ->
   it "Should set the topic", ->
-    @client.setTopic 12, 'iAmTopic'
+    @client.setTopic {room: 'room1'}, 'iAmTopic'
     @stubs._topic.should.equal 'iAmTopic'
 
 describe 'send()', ->

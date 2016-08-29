@@ -107,7 +107,7 @@ class SlackBot extends Adapter
   topic: (envelope, strings...) ->
     return if envelope.room[0] is 'D' # ignore DMs
 
-    @client.setTopic envelope.room, strings.join "\n"
+    @client.setTopic envelope, strings.join "\n"
 
 
   ###
