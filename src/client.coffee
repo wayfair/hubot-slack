@@ -75,7 +75,8 @@ class SlackClient
     room = envelope.room
     if !(room.match /[A-Z]/) # slack rooms are always lowercase
       # try to translate room name to room id
-      channelForName = @rtm.dataStore.getChannelOrGroupByName(room)
+      channelForName = @rtm.dataStore.getChannelOrGroupByName(room) or @rtm.dataStore.getDMByName(room)
+
       if channelForName
         room = channelForName.id
 

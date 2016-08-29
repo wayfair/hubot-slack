@@ -82,6 +82,11 @@ describe 'send()', ->
     @stubs._msg.should.equal 'Message'
     @stubs._room.should.equal 'C00000004'
 
+  it 'Should translate known dms to a channel id', ->
+    @client.send {room: 'known_dm'}, 'Message'
+    @stubs._msg.should.equal 'Message'
+    @stubs._room.should.equal 'D00000004'
+
   it 'Should not translate an unknown room', ->
     @client.send {room: 'unknown_room'}, 'Message'
     @stubs._msg.should.equal 'Message'
