@@ -130,9 +130,13 @@ class SlackBot extends Adapter
 
     # Direct messages
     if channel.id[0] is 'D'
-      text = "#{@robot.name} #{text}"     # If this is a DM, pretend it was addressed to us
       channel.name ?= channel._modelName  # give the channel a name
 
+      # If this is a DM, pretend it was addressed to us (prepend the robot name).
+      # But do it only if the text does not already start with the name, or the alias.
+      nameRegex = "@?#{@robot.name}" # optional @
+      prefixRegex = if @robot.alias then "(#{nameRegex}|#{@robot.alias})" else "#{nameRegex}"
+      text = "#{@robot.name} #{text}" unless text.match (new RegExp("^#{prefixRegex}", 'i'))
 
     # Send to Hubot based on message type
     switch subtype
