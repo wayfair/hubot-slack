@@ -79,12 +79,19 @@ class SlackClient
       if channelForName
         room = channelForName.id
 
+    # These options apply only to the web client currently
+    # RTM behaves as though `as_user` is true already and message formatting like
+    # `link_names`does not seem to work there.
+    messageOptions =
+      as_user: true
+      link_names: true
+
     if typeof message isnt 'string'
-      @web.chat.postMessage(room, message.text, _.defaults(message, {'as_user': true}))
+      @web.chat.postMessage(room, message.text, _.defaults(message, messageOptions))
     else if /<.+\|.+>/.test(message)
-      @web.chat.postMessage(room, message, {'as_user' : true})
+      @web.chat.postMessage(room, message, messageOptions)
     else
-      @rtm.sendMessage(message, room) # RTM behaves as though `as_user` is true already
+      @rtm.sendMessage(message, room)
 
 
 module.exports = SlackClient
