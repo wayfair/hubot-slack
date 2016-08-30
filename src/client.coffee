@@ -74,11 +74,22 @@ class SlackClient
     message = @format.outgoing(message)
     room = envelope.room
     if !(room.match /[A-Z]/) # slack rooms are always lowercase
-      # try to translate room name to room id
+      # try to translate room name to channel/group/DM ID
       channelForName = @rtm.dataStore.getChannelOrGroupByName(room) or @rtm.dataStore.getDMByName(room)
 
       if channelForName
         room = channelForName.id
+      else
+        # If we can't find a valid channel/group/DM for the room input, treat it as a username and try
+        # to start a direct message. This resolves cases where hubot can't DM a user if no previous DM
+        # exists between the two.
+        userForName = @rtm.dataStore.getUserByName(room)
+        if userForName
+          @web.im.open userForName.id, (err, resp) =>
+            # try to send the message again only if we successfully opened a DM
+            if (not err) and resp.ok
+              @send envelope, message
+          return
 
     if typeof message isnt 'string'
       @web.chat.postMessage(room, message.text, _.defaults(message, {'as_user': true}))

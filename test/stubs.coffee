@@ -105,6 +105,10 @@ beforeEach ->
         switch name
           when 'known_dm' then {id: 'D00000004'}
           else undefined
+      getUserByName: (name) =>
+        switch name
+          when 'known_user' then {id: 'U00000004'}
+          else undefined
   @stubs.chatMock =
     postMessage: (room, messageText, message) =>
       @stubs._msg = messageText
