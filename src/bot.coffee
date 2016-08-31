@@ -1,6 +1,7 @@
 {Adapter, TextMessage, EnterMessage, LeaveMessage, TopicMessage, Message, CatchAllMessage} = require.main.require 'hubot'
 
 SlackClient = require './client'
+Util = require 'util'
 
 class SlackBot extends Adapter
 
@@ -83,7 +84,7 @@ class SlackBot extends Adapter
     sent_messages = []
     for message in messages
       if message isnt ''
-        @robot.logger.debug "Sending to #{envelope.room}: #{message}"
+        @robot.logger.debug "Sending to #{envelope.room}: #{Util.inspect message}"
         sent_messages.push @client.send(envelope, message)
     return sent_messages
 
@@ -96,7 +97,7 @@ class SlackBot extends Adapter
     for message in messages
       if message isnt ''
         message = "<@#{envelope.user.id}>: #{message}" unless envelope.room[0] is 'D'
-        @robot.logger.debug "Sending to #{envelope.room}: #{message}"
+        @robot.logger.debug "Sending to #{envelope.room}: #{Util.inspect message}"
         sent_messages.push @client.send(envelope, message)
     return sent_messages
 
