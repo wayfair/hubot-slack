@@ -63,8 +63,14 @@ class SlackClient
   ###
   Set a channel's topic
   ###
-  setTopic: (id, topic) ->
-    @web.channels.setTopic(id, topic)
+  setTopic: (envelope, topic) ->
+    room = envelope.room
+    if !(room.match /[A-Z]/) # slack rooms are always lowercase
+      # try to translate room name to room id
+      channelForName = @rtm.dataStore.getChannelByName(room)
+      if channelForName
+        room = channelForName.id
+    @web.channels.setTopic(room, topic)
 
 
   ###
